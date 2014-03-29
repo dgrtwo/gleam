@@ -2,15 +2,27 @@
 
 {% block title %}{{ title }}{% endblock %}
 
-{% block head %}{% endblock %}
+{% block head %}
+    <script>
+    $(function() {
+       $(".auto_submit_item").change(function() {
+         $("widget_form").submit();
+       });
+    });
+    </script>
+{% endblock %}
 
 {% block content %}
+    <form id="widget_form">
     {% for widget in widgets %}
         {{ widget }}
     {% endfor %}
+    
+    </form>
 
     {% for output in outputs %}
         {{ output }}
     {% endfor %}
+
 
 {% endblock %}
