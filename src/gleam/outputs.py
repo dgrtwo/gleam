@@ -16,12 +16,12 @@ class Output:
 
 class Plot(Output):
     """A displayed figure"""
-    def __init__(self, width=600, height=600, type="matplotlib",
+    def __init__(self, width=600, height=600, plotter="matplotlib",
                  extension="pdf"):
         # to do: specify one not other
         self.width = width
         self.height = height
-        self.type = type
+        self.plotter = plotter
         self.extension = extension
 
     def __call__(self, func):
@@ -43,16 +43,16 @@ class Plot(Output):
 
         outfile = os.path.join(self.plot_dir, h + "." + self.extension)
 
-        if self.type == "custom":
+        if self.plotter == "custom":
             kwargs["__outfile"] = outfile
 
         ret = self.func(*args, **kwargs)
 
         # after
-        if self.type == "matplotlib":
+        if self.plotter == "matplotlib":
             from matplotlib import pyplot as plt
             plt.save(outfile)
-        elif self.type == "ggplot":
+        elif self.plotter == "ggplot":
             from ggplot.utils import ggsave
             ggsave(outfile, ret)
         return {"src": outfile.replace("\/", "/")}

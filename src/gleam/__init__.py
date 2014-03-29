@@ -30,10 +30,10 @@ class Page(object):
             obj.setup(name)
 
         # create main_view
+        @app.route(path, methods=["GET"])
         def main_view():
-            pass                
-
-        app.route(path, methods=["GET"])(main_view)
+            template = env.get_template('page.html')
+            return template.render({'widgets': widgets.values(), 'outputs': outputs.values()})
 
         # create server_view
         @app.route(path + "/server", methods=["GET"])
@@ -56,8 +56,8 @@ class Page(object):
 
 
     @classmethod
-    def run(cls):
+    def run(cls, *args, **kwargs):
         """Create a Flask application with this single page"""
         app = Flask(cls.__name__)
         cls.add_flask(app)
-        return app
+        app.run(*args, **kwargs)

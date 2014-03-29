@@ -1,3 +1,4 @@
+from flask import Flask
 import gleam
 from gleam import widgets, outputs
 
@@ -18,8 +19,12 @@ class MyGleam(gleam.Page):
         if smoother:
             p = p + stat_smooth()
 
-        print p + geom_point() + ggtitle(title)
+        return p + geom_point() + ggtitle(title)
 
-
+app = Flask('myapp')
+MyGleam.add_flask(app)
 if __name__ == "__main__":
-    MyGleam.run()
+    app.debug = True
+    app.run(host='0.0.0.0', port=80)
+
+    # MyGleam.run(host='0.0.0.0', port=80)
