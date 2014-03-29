@@ -43,7 +43,8 @@ class Page(object):
         def main_view():
             form = InputForm(csrf_enabled=False)
             template = env.get_template('page.html')
-            return template.render({'form': form, 
+            return template.render({'title': cls.pageTitle,
+                                    'form': form, 
                                     'outputs': outs.values(),
                                     'server_path': server_path})
 

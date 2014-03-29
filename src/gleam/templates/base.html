@@ -5,13 +5,17 @@
     {% block head %}
     <link rel="stylesheet" href="/static/css/bootstrap.css" />
     <title>{% block title %}{% endblock %}</title>
+    {% block css %}
+    {% endblock %}
     {% endblock %}
 </head>
 <body>
-    <div id="content">{% block content %}{% endblock %}</div>
-    <div id="footer">
-        {% block footer %}
-        {% endblock %}
+    <div class="container">
+        <div id="content">{% block content %}{% endblock %}</div>
+        <div id="footer">
+            {% block footer %}
+            {% endblock %}
+        </div>
     </div>
 </body>
 <!-- <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.0/jquery.min.js"></script> -->

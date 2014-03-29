@@ -3,10 +3,10 @@ import gleam
 from gleam import widgets, outputs
 from wtforms import fields
 
-from ggplot import *
+from ggplot import meat, aes, stat_smooth, geom_point, ggtitle
 
 class MyGleam(gleam.Page):
-    Title = "Meat Scatter Plot"
+    pageTitle = "Meat Scatter Plot"
 
     # xvar = widgets.Select(label="X axis", choices=["Date"])
     smoother = fields.BooleanField(label="Add Smoothing Curve?")
