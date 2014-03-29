@@ -7,14 +7,14 @@
     $(document).ready(function() {
         refresh();
 
-        $(".auto_submit_item").change(function() {
+        $("#widget_form").change(function() {
             refresh();
         });
     });
 
     function refresh()  {
         $('#widget_form').ajaxSubmit({url: "{{server_path}}", 
-                                        type: 'get',
+                                        type: 'post',
                                         dataType: 'json',
                                         success: showResponse});
     }
@@ -31,8 +31,8 @@
 
 {% block content %}
     <form id="widget_form" role="form">
-    {% for widget in widgets %}
-        {{ widget }}
+    {% for field in form %}
+        {{ field.label }} {{ field }}
     {% endfor %}
     </form>
 

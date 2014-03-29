@@ -42,7 +42,8 @@ class Plot(Output):
         Output.setup(self, name, env)
 
     def refresh(self, *args, **kwargs):
-        # before
+        """
+        Generate a new image, then tell the page to change the src"""
         h = hashlib.md5(str(args) + str(kwargs)).hexdigest()
 
         outfile = os.path.join(self.plot_dir, h + "." + self.extension)
