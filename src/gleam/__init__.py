@@ -4,7 +4,7 @@ Gleam: interactive visualizations in Python
 
 import json
 
-from flask import Flask
+from flask import Flask, request
 from jinja2 import Environment, PackageLoader
 
 from widgets import Widget
@@ -16,6 +16,8 @@ class Page(object):
         """Add this page to a Flask application at the given path"""
         # setup
         attrs = dict((n, getattr(cls, n)) for n in dir(cls))
+
+        print attrs
 
         widgets = dict((k, v) for (k, v) in attrs.iteritems()
                             if isinstance(v, Widget))
@@ -33,9 +35,10 @@ class Page(object):
         def main_view():
             pass                
 
-        app.route(path, methods=["GET"])(cls.main_view)
+        app.route(path, methods=["GET"])(main_view)
 
         # create server_view
+        @app.route(path + "/server", methods=["GET"])
         def server_view():
             # call each output to refresh the page
             res = {}
@@ -50,11 +53,9 @@ class Page(object):
                 # to-do: set up outfile for plot objects
                 res[name] = o.refresh(**dict((a, request.args[a])
                                                 for a in o.args))
-                
 
             return json.dumps({"changes": res})
 
-        app.route(path + "/server", methods=["GET"])(cls.server_view)
 
     @classmethod
     def run(cls):

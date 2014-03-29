@@ -28,6 +28,7 @@ class Plot(Output):
         """Using as a decorator"""
         self.func = func
         self.args = inspect.getargspec(func).args
+        return self
 
     def setup(self, name):
         """create an output folder if it doesn't exist"""
@@ -38,7 +39,7 @@ class Plot(Output):
 
     def refresh(self, *args, **kwargs):
         # before
-        h = hashlib.md5().hexdigest(str(args) + str(kwargs))
+        h = hashlib.md5(str(args) + str(kwargs)).hexdigest()
 
         outfile = os.path.join(self.plot_dir, h + "." + self.extension)
 
