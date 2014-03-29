@@ -48,8 +48,9 @@ class Page(object):
                                 "Value %s required for output %s not found" %
                                 (a, name))
 
-                args = dict((a, widgets[a].parse(request.args[a]))
-                                for a in o.args)
+                args = dict((a, request.args[a]) for a in o.args)
+                #args = dict((a, widgets[a].parse(request.args[a]))
+                #                for a in o.args)
                 res[name] = o.refresh(**args)
 
             return json.dumps({"changes": res})
