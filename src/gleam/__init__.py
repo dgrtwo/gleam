@@ -3,6 +3,7 @@ Gleam: interactive visualizations in Python
 """
 
 import json
+import urlparse
 
 from flask import Flask, request
 from jinja2 import Environment, PackageLoader
@@ -15,6 +16,7 @@ class Page(object):
     def add_flask(cls, app, path="/"):
         """Add this page to a Flask application at the given path"""
         # setup
+        server_path = '/'.join([u.strip('/') for u in [path, "server"]])
         attrs = dict((n, getattr(cls, n)) for n in dir(cls))
 
         widgets = dict((k, v) for (k, v) in attrs.iteritems()
@@ -33,10 +35,12 @@ class Page(object):
         @app.route(path, methods=["GET"])
         def main_view():
             template = env.get_template('page.html')
-            return template.render({'widgets': widgets.values(), 'outputs': outputs.values()})
+            return template.render({'widgets': widgets.values(), 
+                                    'outputs': outputs.values(),
+                                    'server_path': server_path})
 
         # create server_view
-        @app.route(path + "/server", methods=["GET"])
+        @app.route(server_path, methods=["GET"])
         def server_view():
             # call each output to refresh the page
             res = {}

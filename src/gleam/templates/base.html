@@ -4,8 +4,11 @@
 <head>
     {% block head %}
     <link rel="stylesheet" href="static/style.css" />
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.0/jquery.min.js"></script>
+    <script src="http://malsup.github.com/jquery.form.js"></script>
     <title>{% block title %}{% endblock %} - My Webpage</title>
     {% endblock %}
+    {% block js %}{% endblock %}
 </head>
 <body>
     <div id="content">{% block content %}{% endblock %}</div>

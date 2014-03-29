@@ -14,12 +14,13 @@ class MyGleam(gleam.Page):
     # title = widgets.Text(label="Title of plot:")
 
     @outputs.Plot(width=600, height=400)
-    def scatter_plot(xvar, yvar, smoother):
-        p = ggplot(meat, aes(x=xvar, y=yvar))
-        if smoother:
+    def scatter_plot(smoother):
+        # p = ggplot(meat, aes(x=xvar, y=yvar))
+        p = ggplot(meat, aes(x='date', y='beef'))
+        if smoother == 'true':
             p = p + stat_smooth()
 
-        return p + geom_point() + ggtitle(title)
+        return p + geom_point() + ggtitle('my delicious meat')
 
 app = Flask('myapp')
 MyGleam.add_flask(app)
