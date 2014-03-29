@@ -1,5 +1,6 @@
 import os
 import unittest
+import shutil
 
 from ggplot import *
 from flask import Flask
@@ -9,12 +10,12 @@ from gleam import Page, widgets, outputs
 class SimpleApp(Page):
     Title = "Meat Scatter Plot"
 
-    #xvar = widgets.Select(label="X axis", choices=["Date"])
-    #yvar = widgets.Select(label="Y axis", choices=["beef", "pork"])
-    #smoother = widgets.Checkbox(label="Add Smoothing Curve?")
-    #title = widgets.Text(label="Title of plot:")
+    xvar = widgets.Select(label="X axis", choices=["date"])
+    yvar = widgets.Select(label="Y axis", choices=["beef", "pork"])
+    smoother = widgets.Checkbox(label="Add Smoothing Curve?")
+    title = widgets.Text(label="Title of plot:")
 
-    @outputs.Plot(width=600, height=400, type="ggplot")
+    @outputs.Plot(width=600, height=400, plotter="ggplot")
     def scatter_plot(xvar, yvar, smoother, title):
         p = ggplot(meat, aes(x=xvar, y=yvar))
         if smoother:
@@ -32,12 +33,19 @@ class TestSimpleApp(unittest.TestCase):
         self.app = app.test_client()
 
     def tearDown(self):
+        #shutil.rmtree(os.path.join("static", "figures"))
         pass
 
     def test_server(self):
-        url = '/gleam/server?xvar=1&yvar=2&smoother=false&title="helloworld"'
+        url = '/gleam/server?xvar=date&yvar=beef&smoother=false&title=Yay'
         res = self.app.get(url)
-        print res.data
+        j = json.loads(res.data)
+        self.assertTrue(os.path.exists(j["changes"]["scatter_plot"]))
+        self.assertTrue("static" in j["changes"]["scatter_plot"])
+
+        # check errors
+        self.assertRaises(ValueError, self.app.get,
+                            ('/gleam/server?xvar=date', ))
 
 
 if __name__ == '__main__':
