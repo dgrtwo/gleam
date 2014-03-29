@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+{% block title %}{{ title }}{% endblock %}
+
+{% block head %}{% endblock %}
+
+{% block content %}
+    {% for widget in widgets %}
+        {{ widget }}
+    {% endfor %}
+
+    {% for output in outputs %}
+        {{ output }}
+    {% endfor %}
+
+{% endblock %}
