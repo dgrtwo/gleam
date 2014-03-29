@@ -17,8 +17,6 @@ class Page(object):
         # setup
         attrs = dict((n, getattr(cls, n)) for n in dir(cls))
 
-        print attrs
-
         widgets = dict((k, v) for (k, v) in attrs.iteritems()
                             if isinstance(v, Widget))
         outputs = dict((k, v) for (k, v) in attrs.iteritems()
