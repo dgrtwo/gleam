@@ -9,18 +9,18 @@ class MyGleam(gleam.Page):
     Title = "Meat Scatter Plot"
 
     # xvar = widgets.Select(label="X axis", choices=["Date"])
-    # yvar = widgets.Select(label="Y axis", choices=["beef", "pork"])
+    yvar = widgets.Select(label="Y axis", choices=["beef", "pork"])
     smoother = widgets.Checkbox(label="Add Smoothing Curve?")
-    # title = widgets.Text(label="Title of plot:")
+    title = widgets.Text(label="Title of plot:")
 
-    @outputs.Plot(width=600, height=400)
-    def scatter_plot(smoother):
+    @outputs.Plot(width=600, height=400, plotter='ggplot')
+    def scatter_plot(smoother, title, yvar):
         # p = ggplot(meat, aes(x=xvar, y=yvar))
-        p = ggplot(meat, aes(x='date', y='beef'))
-        if smoother == 'true':
+        p = ggplot(meat, aes(x='date', y=yvar))
+        if smoother:
             p = p + stat_smooth()
 
-        return p + geom_point() + ggtitle('my delicious meat')
+        return p + geom_point() + ggtitle(title)
 
 app = Flask('myapp')
 MyGleam.add_flask(app)

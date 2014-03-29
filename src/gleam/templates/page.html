@@ -4,23 +4,36 @@
 
 {% block js %}
     <script>
-    $(function() {
-       $(".auto_submit_item").change(function() {
-            alert('it works');
-            $('#widget_form').ajaxSubmit({url: "{{server_path}}", type: 'get'}, function() {
-                alert('it returned!');
-            });
-       });
+    $(document).ready(function() {
+        refresh();
+
+        $(".auto_submit_item").change(function() {
+            refresh();
+        });
     });
+
+    function refresh()  {
+        $('#widget_form').ajaxSubmit({url: "{{server_path}}", 
+                                        type: 'get',
+                                        dataType: 'json',
+                                        success: showResponse});
+    }
+
+    function showResponse(responseJson) {
+        for (var id in responseJson['changes']) {
+            for (var attr in responseJson['changes'][id]) {
+                $('#'+id).attr(attr, responseJson['changes'][id][attr]);
+            }
+        }
+    }
     </script>
 {% endblock %}
 
 {% block content %}
-    <form id="widget_form" action="{{server_path}}">
+    <form id="widget_form" role="form">
     {% for widget in widgets %}
         {{ widget }}
     {% endfor %}
-    <input id="widget_submit" type="submit" value="Submit">
     </form>
 
     {% for output in outputs %}

@@ -26,10 +26,8 @@ class Page(object):
 
         env = Environment(loader=PackageLoader('gleam', 'templates'))
 
-        for name, obj in widgets.items():
+        for name, obj in widgets.items() + outputs.items():
             obj.setup(name, env)
-        for name, obj in outputs.items():
-            obj.setup(name)
 
         # create main_view
         @app.route(path, methods=["GET"])
@@ -40,21 +38,15 @@ class Page(object):
                                     'server_path': server_path})
 
         # create server_view
-        @app.route(server_path, methods=["GET"])
+        @app.route(server_path, methods=["GET","POST"])
         def server_view():
             res = {}
 
             # check we have all the values necessary for output method
             for name, o in outputs.iteritems():
-                for a in o.args:
-                    if a not in request.args:
-                        raise ValueError(
-                                "Value %s required for output %s not found" %
-                                (a, name))
-
-                args = dict((a, request.args[a]) for a in o.args)
-                #args = dict((a, widgets[a].parse(request.args[a]))
-                #                for a in o.args)
+                #args = dict((a, request.args[a]) for a in o.args)
+                args = dict((a, widgets[a].parse(request.args))
+                                for a in o.args)
                 res[name] = o.refresh(**args)
 
             return json.dumps({"changes": res})

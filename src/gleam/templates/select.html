@@ -1,4 +1,5 @@
-
-<form>
-<button id="{{  }}" type="submit" class="btn">Submit</button>
-</form>
+<select class="auto_submit_item form-control" name="{{name}}">
+{% for choice in choices %}
+<option value="{{choice}}" {%if choice==default %}selected="true"{% endif %}>{{choice}}</option>
+{% endfor %}
+</select>

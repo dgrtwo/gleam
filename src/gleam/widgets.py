@@ -19,9 +19,9 @@ class Widget(object):
         # template = env.get_template(os.path.join('widgets',self.Template))
         template = env.get_template(self.Template)
         self.rendered = template.render(**self.values)        
-
-    def parse(self, x):
-        return x
+    
+    def parse(self, args):
+        return args[self.name]
 
     def __repr__(self):
         return self.rendered
@@ -35,8 +35,8 @@ class Slider(Widget):
              "value": value, step: "step"}
         Widget.__init__(self, d)
 
-    def parse(self, x):
-        return ast.literal_eval(x)
+    def parse(self, args):
+        return ast.literal_eval(args[self.name])
 
 
 class Checkbox(Widget):
@@ -44,15 +44,11 @@ class Checkbox(Widget):
     Template = "checkbox.html"
 
     def __init__(self, label, default=False):
+        self.default = default
         Widget.__init__(self, {"label": label, "default": default})
 
-    def parse(self, arg):
-        # either true or false
-        if arg == "true":
-            return True
-        elif arg == "false":
-            return False
-        raise ValueError("Unexpected return from checkbox:" + arg)
+    def parse(self, args):
+        return self.name in args
 
 
 class Select(Widget):
