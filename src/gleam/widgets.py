@@ -3,6 +3,8 @@ Widgets are inputs in HTML/CSS/JS
 """
 
 import os
+import ast
+
 
 class Widget(object):
     """Overall widget class"""
@@ -18,6 +20,9 @@ class Widget(object):
         template = env.get_template(self.Template)
         self.rendered = template.render(**self.values)        
 
+    def parse(self, x):
+        return x
+
     def __repr__(self):
         return self.rendered
 
@@ -30,6 +35,9 @@ class Slider(Widget):
              "value": value, step: "step"}
         Widget.__init__(self, d)
 
+    def parse(self, x):
+        return ast.literal_eval(x)
+
 
 class Checkbox(Widget):
     """Checkbox for boolean input"""
@@ -37,6 +45,14 @@ class Checkbox(Widget):
 
     def __init__(self, label, default=False):
         Widget.__init__(self, {"label": label, "default": default})
+
+    def parse(self, arg):
+        # either true or false
+        if arg == "true":
+            return True
+        elif arg == "false":
+            return False
+        raise ValueError("Unexpected return from checkbox:" + arg)
 
 
 class Select(Widget):

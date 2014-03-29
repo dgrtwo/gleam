@@ -38,19 +38,19 @@ class Page(object):
         # create server_view
         @app.route(path + "/server", methods=["GET"])
         def server_view():
-            # call each output to refresh the page
             res = {}
+
+            # check we have all the values necessary for output method
             for name, o in outputs.iteritems():
-                # check we have all the values necessary for output method
                 for a in o.args:
                     if a not in request.args:
                         raise ValueError(
                                 "Value %s required for output %s not found" %
                                 (a, name))
 
-                # to-do: set up outfile for plot objects
-                res[name] = o.refresh(**dict((a, request.args[a])
-                                                for a in o.args))
+                args = dict((a, widgets[a].parse(request.args[a]))
+                                for a in o.args)
+                res[name] = o.refresh(**args)
 
             return json.dumps({"changes": res})
 
