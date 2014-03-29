@@ -43,16 +43,16 @@ class Plot(Output):
 
         outfile = os.path.join(self.plot_dir, h + "." + self.extension)
 
-        if type == "custom":
+        if self.type == "custom":
             kwargs["__outfile"] = outfile
 
         ret = self.func(*args, **kwargs)
 
         # after
-        if type == "matplotlib":
+        if self.type == "matplotlib":
             from matplotlib import pyplot as plt
             plt.save(outfile)
-        elif type == "ggplot":
+        elif self.type == "ggplot":
             from ggplot.utils import ggsave
-            ggsave(outfile)
+            ggsave(outfile, ret)
         return {"src": outfile.replace("\/", "/")}
