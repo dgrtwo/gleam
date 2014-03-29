@@ -7,10 +7,10 @@ from ggplot import *
 class MyGleam(gleam.Page):
     Title = "Meat Scatter Plot"
 
-    xvar = widgets.Select(label="X axis", choices=["Date"])
-    yvar = widgets.Select(label="Y axis", choices=["beef", "pork"])
+    # xvar = widgets.Select(label="X axis", choices=["Date"])
+    # yvar = widgets.Select(label="Y axis", choices=["beef", "pork"])
     smoother = widgets.Checkbox(label="Add Smoothing Curve?")
-    title = widgets.Text(label="Title of plot:")
+    # title = widgets.Text(label="Title of plot:")
 
     @outputs.Plot(width=600, height=400)
     def scatter_plot(xvar, yvar, smoother):

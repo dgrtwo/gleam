@@ -60,5 +60,5 @@ class Page(object):
     def run(cls):
         """Create a Flask application with this single page"""
         app = Flask(cls.__name__)
-        cls.add_flask(cls)
+        cls.add_flask(app)
         return app

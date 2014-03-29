@@ -2,6 +2,7 @@
 Widgets are inputs in HTML/CSS/JS
 """
 
+import os
 
 class Widget(object):
     """Overall widget class"""
@@ -13,6 +14,7 @@ class Widget(object):
         self.name = name
         self.values["name"] = name
 
+        # template = env.get_template(os.path.join('widgets',self.Template))
         template = env.get_template(self.Template)
         self.rendered = template.render(**self.values)        
 
