@@ -14,13 +14,13 @@ class SimpleApp(Page):
     #smoother = widgets.Checkbox(label="Add Smoothing Curve?")
     #title = widgets.Text(label="Title of plot:")
 
-    @outputs.Plot(width=600, height=400)
-    def scatter_plot(xvar, yvar, smoother):
+    @outputs.Plot(width=600, height=400, type="ggplot")
+    def scatter_plot(xvar, yvar, smoother, title):
         p = ggplot(meat, aes(x=xvar, y=yvar))
         if smoother:
             p = p + stat_smooth()
 
-        print p + geom_point() + ggtitle(title)
+        return p + geom_point() + ggtitle(title)
 
 
 class TestSimpleApp(unittest.TestCase):
@@ -35,7 +35,9 @@ class TestSimpleApp(unittest.TestCase):
         pass
 
     def test_server(self):
-        print self.app.get('/gleam/server?xvar=1&yvar=2&smoother=false')
+        url = '/gleam/server?xvar=1&yvar=2&smoother=false&title="helloworld"'
+        res = self.app.get(url)
+        print res.data
 
 
 if __name__ == '__main__':
