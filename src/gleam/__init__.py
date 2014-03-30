@@ -8,7 +8,6 @@ import urlparse
 from flask import Flask, request
 from jinja2 import Environment, PackageLoader
 
-from widgets import Widget
 from outputs import Output
 from flask_wtf import Form
 from wtforms.fields import Field

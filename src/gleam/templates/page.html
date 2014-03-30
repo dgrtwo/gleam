@@ -4,18 +4,7 @@
 {% block title %}{{ title }}{% endblock %}
 
 {% block css %}
-<style>
-    .loader {
-        z-index: 1;
-        position: absolute;
-        background-color: white;
-    }
-        
-    .output {
-        z-index: -1;
-        position: absolute;
-    }
-</style>
+<link rel="stylesheet" href="/static/css/styles.css" />
 {% endblock %}
 
 {% block js %}
@@ -41,6 +30,7 @@
                 $('#'+id).attr(attr, responseJson['changes'][id][attr]);
             }
         }
+        $(".loader").hide();
     }
     </script>
 {% endblock %}
@@ -58,9 +48,13 @@
 
       </div>
       <div class="col-md-4">
-        {% for output in outputs %}
-        {{ output }}
-        {% endfor %}
+        {% if tabs %}
+            <div 
+        {% else %}
+            {% for output in outputs %}
+            {{ output }}
+            {% endfor %}
+        {% endif %}
       </div>
     </div>
 

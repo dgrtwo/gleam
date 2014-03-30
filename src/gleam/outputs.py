@@ -6,7 +6,6 @@ import os
 import hashlib
 import inspect
 
-
 class Output:
     """An output displayed to the user"""
     def setup(self, name, env):
@@ -14,19 +13,21 @@ class Output:
         self.name = name
         self.values["name"] = name
         template = env.get_template(self.Template)
-        self.rendered = template.render(**self.values)        
+        overlay_template = env.get_template("overlay.html")
+        self.rendered = overlay_template.render(**self.values) + template.render(**self.values)        
 
 
 class Plot(Output):
     """A displayed figure"""
     Template = "plot.html"
 
-    def __init__(self, width=600, height=600, plotter="matplotlib",
-                 extension="png"):
+    def __init__(self, width=600, height=600, plotter="ggplot",
+                 extension="png", panel=None):
         # to do: specify one not other
         self.values = {"height": height, "width": width}
         self.plotter = plotter
         self.extension = extension
+        self.panel = panel
 
     def __call__(self, func):
         """Using as a decorator"""
