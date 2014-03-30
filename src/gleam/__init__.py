@@ -46,8 +46,9 @@ class Page(object):
                 raise Exception
 
     @classmethod
-    def run(cls, *args, **kwargs):
+    def run(cls, debug=False, *args, **kwargs):
         """Create a Flask application with this single page"""
         app = Flask(cls.__name__)
         cls.add_flask(app)
+        app.debug = debug
         app.run(*args, **kwargs)

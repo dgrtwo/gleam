@@ -1,16 +1,18 @@
 from jinja2 import Environment, PackageLoader
 import os
 import hashlib
+import random
 
 import wtforms
 from wtforms import Form
 from wtforms.fields import Field
 from wtforms.fields.core import UnboundField
 
+
 class Panel(object):
 
     column_class = "col-md-4"
-    
+
     def __init__(self):
         self.values = {}
         self.values["column_class"] = self.column_class
@@ -22,25 +24,25 @@ class Panel(object):
         """Render the panel"""
         env = Environment(loader=PackageLoader('gleam', 'templates'))
         template = env.get_template(self.template_name)
-        rendered = template.render(**self.values)  
+        rendered = template.render(**self.values)
         return rendered
 
 
 class Inputs(Panel):
     """"An panel to display form inputs for the chart"""
-    
+
     template_name = "input.html"
 
     def __init__(self):
         super(Inputs, self).__init__()
         form_class = self.form_class()
         self.values["form"] = form_class(csrf_enabled=False)
-        
+
     def form_class(self):
         """ Create an input form class with the fields in the panel class."""
         class InputForm(Form):
             extra = wtforms.fields.HiddenField()
-            
+
         # get the fields
         for name, obj in self.__class__.__dict__.iteritems():
             if isinstance(obj, UnboundField):
@@ -50,23 +52,24 @@ class Inputs(Panel):
 
 
 class Tabs(Panel):
-    
+
     template_name = "tabs.html"
-    
-    def __init__(self):
+
+    def __init__(self, tabs):
+        self.tabs = tabs
         super(Tabs, self).__init__()
-        self.values["tabs"] = self.tabs
-        
+        self.values["tabs"] = tabs
+
     def refresh(self, data):
         for tab in self.tabs:
             if tab.id() == data.extra:
                 return tab.refresh(data)
         return {}
-        
+
 
 class Plot(Panel):
     """A panel that contains a plot"""
-    
+
     template_name = "plot.html"
     width = 600
     height = 600
@@ -76,10 +79,10 @@ class Plot(Panel):
 
     def __init__(self):
         super(Plot, self).__init__()
-        self.values["height"] = self.__class__.height
-        self.values["width"] = self.__class__.width
-        self.values["name"] = self.__class__.name
-        self.plot_dir = os.path.join("static", "figures", self.__class__.name)
+        self.values["height"] = self.height
+        self.values["width"] = self.width
+        self.values["name"] = self.name
+        self.plot_dir = os.path.join("static", "figures", self.name)
         if not os.path.exists(self.plot_dir):
             os.makedirs(self.plot_dir)
 
@@ -104,8 +107,11 @@ class Plot(Panel):
             if self.plotter == "matplotlib":
                 from matplotlib import pyplot as plt
                 plt.clf()
-            
+
             ret = self.plot(data)
+            if ret is None:
+                # don't change the plot at all
+                return {self.name: {}}
 
             # after
             if self.plotter == "matplotlib":
@@ -114,7 +120,11 @@ class Plot(Panel):
                 from ggplot.utils import ggsave
                 ggsave(outfile, ret)
 
-        return {self.__class__.name: {"src": outfile.replace("\/", "/")}}
+        # turn into a URL, add a dummy param to avoid browser caching
+        url = outfile.replace(os.path.sep, "/")
+        url = url + "?dummy=" + str(random.random())
+
+        return {self.name: {"src": url}}
 
     def __repr__(self):
         return self.render()

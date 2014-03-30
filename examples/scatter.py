@@ -30,7 +30,6 @@ class ScatterPlot(panels.Plot):
     width = 600
     height = 400
     name = "Scatter"
-    
 
     def plot(self, inputs):
         p = ggplot(meat, aes(x='date', y=inputs.yvar))
