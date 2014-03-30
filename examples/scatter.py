@@ -1,33 +1,57 @@
 from flask import Flask
-import gleam
-from gleam import widgets, outputs
+from gleam import Page, panels, outputs
 from wtforms import fields
 
-from ggplot import meat, aes, stat_smooth, geom_point, ggtitle
+from ggplot import meat, aes, stat_smooth, geom_point, ggtitle, ggplot
 
-class MyGleam(gleam.Page):
-    pageTitle = "Meat Scatter Plot"
-
-    # xvar = widgets.Select(label="X axis", choices=["Date"])
-    smoother = fields.BooleanField(label="Add Smoothing Curve?")
+class GleamInput(panels.Inputs):
+    smoother = fields.BooleanField(label="Smoothing Curve")
     title = fields.StringField(label="Title of plot:")
     yvar = fields.SelectField(label="Y axis",
                               choices=[("beef", "Beef"),
                                        ("pork", "Pork")])
 
-    @outputs.Plot(width=600, height=400, plotter='ggplot')
-    def scatter_plot(smoother, title, yvar):
-        # p = ggplot(meat, aes(x=xvar, y=yvar))
-        p = ggplot(meat, aes(x='date', y=yvar))
-        if smoother:
-            p = p + stat_smooth(color="red")
 
-        return p + geom_point() + ggtitle(title)
+class HistoryPlot(panels.Plot):
+    width = 600
+    height = 400
+    name = "History"
+
+    def plot(self, inputs):
+        #import pdb; pdb.set_trace()
+        p = ggplot(meat, aes(x='date', y=inputs.yvar))
+        if inputs.smoother:
+            p = p + stat_smooth(color="red")
+        p = p + geom_point() + ggtitle(inputs.title)
+        return p
+
+
+class ScatterPlot(panels.Plot):
+    width = 600
+    height = 400
+    name = "Scatter"
+    
+
+    def plot(self, inputs):
+        p = ggplot(meat, aes(x='date', y=inputs.yvar))
+        if inputs.smoother:
+            p = p + stat_smooth(color="red")
+        p = p + geom_point() + ggtitle(inputs.title)
+        return p
+
+     
+class TabPanel(panels.Tabs):
+    tabs = [HistoryPlot(), ScatterPlot()]
+
+
+class MyGleam(Page):
+    title = "Meat Scatter Plot"
+    input = GleamInput()
+    output = TabPanel()
+
 
 app = Flask('myapp')
 MyGleam.add_flask(app)
 if __name__ == "__main__":
     app.debug = True
     app.run()
-
-    # MyGleam.run(host='0.0.0.0', port=80)

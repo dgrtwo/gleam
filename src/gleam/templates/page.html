@@ -1,5 +1,4 @@
 {% extends "base.html" %}
-{% from 'macros.html' import render_form %}
 
 {% block title %}{{ title }}{% endblock %}
 
@@ -10,19 +9,29 @@
 {% block js %}
     <script>
     $(document).ready(function() {
+        var extraTab = $("ul.nav-tabs li.active")[0]
+        $("[name='extra']").val($(extraTab).attr('id'));
+        console.log(extraTab);
+        console.log($(extraTab).attr('id'));
         refresh();
 
         $("#input_form").change(function() {
             refresh();
         });
     });
-
+    
     function refresh() {
         $('#input_form').ajaxSubmit({url: "{{server_path}}", 
                                         type: 'post',
                                         dataType: 'json',
                                         success: showResponse});
     }
+
+    $('.nav-tabs').bind("change", function(e) {
+        var extraTab = $("ul.nav-tabs li.active")[0]
+        $("[name='extra']").val($(extraTab).attr('id'));
+        refresh();
+    });
 
     function showResponse(responseJson) {
         for (var id in responseJson['changes']) {
@@ -42,20 +51,7 @@
       </div>
     </div>
     <div class="row">
-      <div class="col-md-4">
-      
-    {{ render_form(form, id_='input_form') }}
-
-      </div>
-      <div class="col-md-4">
-        {% if tabs %}
-            <div 
-        {% else %}
-            {% for output in outputs %}
-            {{ output }}
-            {% endfor %}
-        {% endif %}
-      </div>
+        {{ panels }}
     </div>
 
 
