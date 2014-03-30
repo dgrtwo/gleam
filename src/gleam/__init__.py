@@ -26,7 +26,6 @@ class Page(object):
         # create main_view
         @app.route(path, methods=["GET"])
         def main_view():
-            print "True!"
             template = env.get_template('page.html')
             return template.render({'panels': panels_rendered})
 

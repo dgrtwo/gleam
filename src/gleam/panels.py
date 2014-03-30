@@ -13,8 +13,7 @@ class Panel(object):
     
     def __init__(self):
         self.values = {}
-        self.values["panel"] = self
-        self.values["column_class"] = self.__class__.column_class
+        self.values["column_class"] = self.column_class
 
     def id(self):
         return self.name.replace(" ", "-").lower()
@@ -60,7 +59,7 @@ class Tabs(Panel):
         
     def refresh(self, data):
         for tab in self.tabs:
-            if tab.name == data.extra:
+            if tab.id() == data.extra:
                 return tab.refresh(data)
         return {}
         

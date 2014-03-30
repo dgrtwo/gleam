@@ -40,6 +40,8 @@
     </div>
 {%- endmacro %}
  
+
+ 
 {# Renders radio field
     Params:
         field - WTForm field (there are no check, but you should put here only BooleanField.
@@ -87,7 +89,9 @@
                     {{ render_checkbox_field(f) }}
                 {% elif f.type == 'RadioField' %}
                     {{ render_radio_field(f) }}
-                {% elif f.id != 'csrf_token' %}
+                {% elif f.type == 'HiddenField' %}
+                    {{ f }}
+                {% else %}
                     {{ render_field(f) }}
                 {% endif %}
             {% endfor %}

@@ -2,13 +2,13 @@
 <ul class="nav nav-tabs">
     {% for tab in tabs%}
     {% set navloop = loop %}
-        <li{% if navloop.index == 1 %} class="active"{% endif %} id="{{ tab.id() }}"><a href="#tab-{{ tab.id() }}">{{ tab.name }}</a></li>
+        <li{% if navloop.index == 1 %} class="active"{% endif %}><a href="#{{ tab.id() }}-tab" data-toggle="tab"  id="{{ tab.id() }}">{{ tab.name }}</a></li>
     {% endfor %}
 </ul>
 <div class="tab-content">
   {% for tab in tabs %}
   {% set tabloop = loop %}
-      <div class="tab-pane{% if tabloop.index == 1 %} active{% endif %}" id="tab-{{ tab.id() }}">
+      <div class="tab-pane{% if tabloop.index == 1 %} active{% endif %}" id="{{ tab.id() }}-tab">
           {{ tab.render() }}
       </div>
   {% endfor %}

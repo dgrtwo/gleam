@@ -35,7 +35,7 @@ class ScatterPlot(panels.Plot):
     def plot(self, inputs):
         p = ggplot(meat, aes(x='date', y=inputs.yvar))
         if inputs.smoother:
-            p = p + stat_smooth(color="red")
+            p = p + stat_smooth(color="blue")
         p = p + geom_point() + ggtitle(inputs.title)
         return p
 
