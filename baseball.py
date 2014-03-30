@@ -64,7 +64,7 @@ class DataScatter(panels.Plot):
 
 
 class BaseballGleam(Page):
-    title = "Meat Scatter Plot"
+    title = "Baseball Statistics"
     input = BaseballInput()
     output = panels.Tabs([DataScatter("Teams", teams, "teamID"),
                           DataScatter("Players", players, "name")])
