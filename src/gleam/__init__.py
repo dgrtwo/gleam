@@ -20,7 +20,7 @@ class Page(object):
         """Add this page to a Flask application at the given path"""
 
         env = Environment(loader=PackageLoader('gleam', 'templates'))
-        
+
         panels_rendered = cls.input.render() + cls.output.render()
 
         # create main_view
@@ -42,8 +42,7 @@ class Page(object):
                 res = cls.output.refresh(d)
                 return json.dumps({"changes": res})
             else:
-                import pdb; pdb.set_trace()
-                raise Exception
+                raise Exception("Form didn't validate")
 
     @classmethod
     def run(cls, debug=False, *args, **kwargs):

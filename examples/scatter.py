@@ -4,7 +4,7 @@ from ggplot import *
 from gleam import Page, panels
 
 
-class ScatterInput(panels.Inputs):
+class ScatterInput(panels.InputPanel):
     title = fields.StringField(label="Title of plot:")
     yvar = fields.SelectField(label="Y axis",
                               choices=[("beef", "Beef"),
@@ -12,7 +12,7 @@ class ScatterInput(panels.Inputs):
     smoother = fields.BooleanField(label="Smoothing Curve")
 
 
-class ScatterPlot(panels.Plot):
+class ScatterPlot(panels.PlotPanel):
     name = "Scatter"
 
     def plot(self, inputs):

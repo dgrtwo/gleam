@@ -10,9 +10,8 @@ import pandas as pd
 
 from gleam import Page, panels, outputs
 
-YEAR = 2013
 
-## setup
+# setup
 
 stats = ['At-Bats (AB)', 'Runs (R)', 'Hits (H)', 'Doubles (2B)',
          'Triples (3B)', 'Home Runs (HR)', 'Runs Batted In (RBI)',
@@ -26,11 +25,11 @@ players = pd.read_csv(os.path.join(dir, "baseball_data", "players.csv"))
 teams = pd.read_csv(os.path.join(dir, "baseball_data", "teams.csv"))
 
 
-class BaseballInput(panels.Inputs):
+class BaseballInput(panels.InputPanel):
     xvar = fields.SelectField(label="X axis", choices=statchoices,
-                                default="Hits (H)")
+                              default="Hits (H)")
     yvar = fields.SelectField(label="Y axis", choices=statchoices,
-                                default="Runs (R)")
+                              default="Runs (R)")
 
     year = fields.IntegerField(label="Year", default=2013)
 
@@ -38,7 +37,7 @@ class BaseballInput(panels.Inputs):
     shownames = fields.BooleanField(label="Show Names")
 
 
-class DataScatter(panels.Plot):
+class DataScatter(panels.PlotPanel):
     height = 500
     width = 700
 
@@ -46,7 +45,7 @@ class DataScatter(panels.Plot):
         self.name = name
         self.dat = dat
         self.ID_col = ID_col
-        panels.Plot.__init__(self)
+        panels.PlotPanel.__init__(self)
 
     def plot(self, inputs):
         """Plot the given X and Y axes on a scatter plot"""
@@ -70,8 +69,8 @@ class DataScatter(panels.Plot):
 class BaseballGleam(Page):
     title = "Baseball Statistics"
     input = BaseballInput()
-    output = panels.Tabs([DataScatter("Teams", teams, "teamID"),
-                          DataScatter("Players", players, "name")])
+    output = panels.TabPanel([DataScatter("Teams", teams, "teamID"),
+                              DataScatter("Players", players, "name")])
 
 
 app = Flask("BaseballGleam")

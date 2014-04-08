@@ -28,13 +28,13 @@ class Panel(object):
         return rendered
 
 
-class Inputs(Panel):
+class InputPanel(Panel):
     """"An panel to display form inputs for the chart"""
 
     template_name = "input.html"
 
     def __init__(self):
-        super(Inputs, self).__init__()
+        super(InputPanel, self).__init__()
         form_class = self.form_class()
         self.values["form"] = form_class(csrf_enabled=False)
 
@@ -51,13 +51,13 @@ class Inputs(Panel):
         return InputForm
 
 
-class Tabs(Panel):
+class TabPanel(Panel):
 
     template_name = "tabs.html"
 
     def __init__(self, tabs):
         self.tabs = tabs
-        super(Tabs, self).__init__()
+        super(TabPanel, self).__init__()
         self.values["tabs"] = tabs
 
     def refresh(self, data):
@@ -67,7 +67,7 @@ class Tabs(Panel):
         return {}
 
 
-class Plot(Panel):
+class PlotPanel(Panel):
     """A panel that contains a plot"""
 
     template_name = "plot.html"
@@ -78,7 +78,7 @@ class Plot(Panel):
     name = "plot"
 
     def __init__(self):
-        super(Plot, self).__init__()
+        super(PlotPanel, self).__init__()
         self.values["height"] = self.height
         self.values["width"] = self.width
         self.values["name"] = self.name
