@@ -21,8 +21,9 @@ stats = ['At-Bats (AB)', 'Runs (R)', 'Hits (H)', 'Doubles (2B)',
 
 statchoices = [(s, s) for s in stats]
 
-players = pd.read_csv(os.path.join("data", "players.csv"))
-teams = pd.read_csv(os.path.join("data", "teams.csv"))
+dir = os.path.split(__file__)[0]
+players = pd.read_csv(os.path.join(dir, "baseball_data", "players.csv"))
+teams = pd.read_csv(os.path.join(dir, "baseball_data", "teams.csv"))
 
 
 class BaseballInput(panels.Inputs):
@@ -38,6 +39,9 @@ class BaseballInput(panels.Inputs):
 
 
 class DataScatter(panels.Plot):
+    height = 500
+    width = 700
+
     def __init__(self, name, dat, ID_col):
         self.name = name
         self.dat = dat
@@ -64,7 +68,7 @@ class DataScatter(panels.Plot):
 
 
 class BaseballGleam(Page):
-    title = "Meat Scatter Plot"
+    title = "Baseball Statistics"
     input = BaseballInput()
     output = panels.Tabs([DataScatter("Teams", teams, "teamID"),
                           DataScatter("Players", players, "name")])

@@ -71,8 +71,8 @@ class Plot(Panel):
     """A panel that contains a plot"""
 
     template_name = "plot.html"
-    width = 600
-    height = 600
+    width = 700
+    height = 500
     plotter = "ggplot"
     extension = "png"
     name = "plot"
