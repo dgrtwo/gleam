@@ -37,3 +37,4 @@ nosetests.xml
 
 static/figures
 .DS_Store
+MANIFEST
