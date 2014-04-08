@@ -1,9 +1,9 @@
 gleam
 =====
 
-Gleam lets you build interactive web visualizations of data using Python: no knowledge of HTML or JS necessary! You can choose a number of inputs your users can control, then use any Python graphing library to create plots based on those inputs. Gleam puts it all together creates a web interface that lets anyone play with your data in real time. Now it's easier than ever to help others understand and interpret your data. 
+Gleam lets you build interactive web visualizations of data using Python: no knowledge of HTML or JS necessary! You can choose a number of inputs your users can control, then use any Python graphing library to create plots based on those inputs. Gleam puts it all together creates a web interface that lets anyone play with your data in real time. Now it's easier than ever to help others understand and interpret your data. Gleam was inspired by the [Shiny](http://www.rstudio.com/shiny/) package in R.
 
-[See here for a live demo](http://gleam-demo.herokuapp.com)!
+[See here for a live demo](http://gleam-demo.herokuapp.com)! (You can find the code for the demo in [examples/baseball.py](examples/baseball.py).
 
 Example
 ---------
