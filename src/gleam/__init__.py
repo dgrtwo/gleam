@@ -2,12 +2,16 @@
 Gleam: interactive visualizations in Python
 """
 
+import os
 import json
 import urlparse
 from collections import namedtuple
 
-from flask import Flask, request
+from flask import Flask, request, send_from_directory
 from jinja2 import Environment, PackageLoader
+
+
+GLEAM_STATIC_DIR = os.path.join(os.path.split(__file__)[0], "static")
 
 
 class InputData(object):
@@ -22,6 +26,11 @@ class Page(object):
         env = Environment(loader=PackageLoader('gleam', 'templates'))
 
         panels_rendered = cls.input.render() + cls.output.render()
+
+        # built-in static views
+        @app.route('/gleam/<path:filename>')
+        def custom_static(filename):
+            return send_from_directory(GLEAM_STATIC_DIR, filename)
 
         # create main_view
         @app.route(path, methods=["GET"])

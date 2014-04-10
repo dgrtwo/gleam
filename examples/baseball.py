@@ -8,7 +8,7 @@ from ggplot import (aes, stat_smooth, geom_point, geom_text, ggtitle, ggplot,
 import numpy as np
 import pandas as pd
 
-from gleam import Page, panels, outputs
+from gleam import Page, panels
 
 
 # setup
