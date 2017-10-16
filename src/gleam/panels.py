@@ -121,7 +121,8 @@ class PlotPanel(Panel):
         elif self.plotter == "ggplot":
             from ggplot.utils import ggsave
 
-            ggsave(tempFile, ret)
+            #ggsave(tempFile, ret)
+            ret.save(tempFile) 
             tempFile.seek(0)
             base64encodedimage = base64.b64encode(tempFile.getvalue()).decode('utf8')
 
