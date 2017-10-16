@@ -4,7 +4,6 @@ Gleam: interactive visualizations in Python
 
 import os
 import json
-import urlparse
 from collections import namedtuple
 
 from flask import Flask, request, send_from_directory
@@ -19,6 +18,7 @@ class InputData(object):
 
 
 class Page(object):
+    
     @classmethod
     def add_flask(cls, app, path="/"):
         """Add this page to a Flask application at the given path"""
