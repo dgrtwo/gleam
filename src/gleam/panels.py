@@ -1,6 +1,8 @@
 from jinja2 import Environment, PackageLoader
 import os
+import io
 import hashlib
+import base64
 import random
 
 import wtforms
@@ -43,10 +45,10 @@ class InputPanel(Panel):
         class InputForm(Form):
             extra = wtforms.fields.HiddenField()
 
-        # get the fields
-        for name, obj in self.__class__.__dict__.iteritems():
-            if isinstance(obj, UnboundField):
-                setattr(InputForm, name, obj)
+        # get the fiel
+        for name in self.__class__.__dict__:     
+            if isinstance(getattr(self,name),UnboundField):
+                setattr(InputForm,name,getattr(self,name))
 
         return InputForm
 
@@ -73,7 +75,7 @@ class PlotPanel(Panel):
     template_name = "plot.html"
     width = 700
     height = 500
-    plotter = "ggplot"
+    plotter = "matplotlib"
     extension = "png"
     name = "plot"
 
@@ -82,9 +84,9 @@ class PlotPanel(Panel):
         self.values["height"] = self.height
         self.values["width"] = self.width
         self.values["name"] = self.name
-        self.plot_dir = os.path.join("static", "figures", self.name)
-        if not os.path.exists(self.plot_dir):
-            os.makedirs(self.plot_dir)
+        #self.plot_dir = os.path.join("static", "figures", self.name)
+        #if not os.path.exists(self.plot_dir):
+        #    os.makedirs(self.plot_dir)
 
     def __call__(self, func):
         """Using as a decorator"""
@@ -94,35 +96,42 @@ class PlotPanel(Panel):
 
     def refresh(self, data):
         """Generate a new image, then tell the page to change the src"""
-        h = hashlib.md5(str(data.__dict__)).hexdigest()
-        print h
+        #cchane
 
-        outfile = os.path.join(self.plot_dir, h + "." + self.extension)
+        if self.plotter == "custom":
+            kwargs["__outfile"] = outfile
 
-        if not os.path.exists(outfile):
+        if self.plotter == "matplotlib":
+            from matplotlib import pyplot as plt
+            plt.clf()
 
-            if self.plotter == "custom":
-                kwargs["__outfile"] = outfile
+        ret = self.plot(data)
+        if ret is None:
+            # don't change the plot at all
+            return {self.name: {}}
 
-            if self.plotter == "matplotlib":
-                from matplotlib import pyplot as plt
-                plt.clf()
+        # after
+        tempFile = io.BytesIO()
+            
+        if self.plotter == "matplotlib":
+                
+            plt.savefig(tempFile,format="png")
+            
+               
+        elif self.plotter == "ggplot":
+            from ggplot.utils import ggsave
 
-            ret = self.plot(data)
-            if ret is None:
-                # don't change the plot at all
-                return {self.name: {}}
-
-            # after
-            if self.plotter == "matplotlib":
-                plt.savefig(outfile)
-            elif self.plotter == "ggplot":
-                from ggplot.utils import ggsave
-                ggsave(outfile, ret)
+            #ggsave(tempFile, ret)
+            ret.save(tempFile) 
+            tempFile.seek(0)
+            base64encodedimage = base64.b64encode(tempFile.getvalue()).decode('utf8')
 
         # turn into a URL, add a dummy param to avoid browser caching
-        url = outfile.replace(os.path.sep, "/")
-        url = url + "?dummy=" + str(random.random())
+        tempFile.seek(0)
+        base64encodedimage = base64.b64encode(tempFile.getvalue()).decode('utf8')
+        tempFile.close()
+
+        url = 'data:image/png;base64,'+ base64encodedimage
 
         return {self.name: {"src": url}}
 
