@@ -44,7 +44,7 @@ class InputPanel(Panel):
             extra = wtforms.fields.HiddenField()
 
         # get the fields
-        for name, obj in self.__class__.__dict__.iteritems():
+        for name, obj in self.__class__.__dict__.items():
             if isinstance(obj, UnboundField):
                 setattr(InputForm, name, obj)
 
@@ -94,8 +94,8 @@ class PlotPanel(Panel):
 
     def refresh(self, data):
         """Generate a new image, then tell the page to change the src"""
-        h = hashlib.md5(str(data.__dict__)).hexdigest()
-        print h
+        h = hashlib.md5(str(data.__dict__).encode('utf-8')).hexdigest()
+        print(h)
 
         outfile = os.path.join(self.plot_dir, h + "." + self.extension)
 
@@ -117,8 +117,9 @@ class PlotPanel(Panel):
             if self.plotter == "matplotlib":
                 plt.savefig(outfile)
             elif self.plotter == "ggplot":
-                from ggplot.utils import ggsave
-                ggsave(outfile, ret)
+                # from plotnine import ggplot
+                #ret.save(outfile, ret)
+                ret.save(outfile)
 
         # turn into a URL, add a dummy param to avoid browser caching
         url = outfile.replace(os.path.sep, "/")
