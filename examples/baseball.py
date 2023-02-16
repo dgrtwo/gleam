@@ -3,7 +3,9 @@ from collections import OrderedDict
 
 from flask import Flask
 from wtforms import fields
-from ggplot import (aes, stat_smooth, geom_point, geom_text, ggtitle, ggplot,
+#import plotnine as ggplot
+#from ggplot import (aes, stat_smooth, geom_point, geom_text, ggtitle, ggplot,
+from plotnine import (aes, stat_smooth, geom_point, geom_text, ggtitle, ggplot,
                     xlab, ylab)
 import numpy as np
 import pandas as pd
