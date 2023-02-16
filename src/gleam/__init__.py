@@ -4,7 +4,7 @@ Gleam: interactive visualizations in Python
 
 import os
 import json
-import urlparse
+import urllib.parse  # Python 3 compatible import
 from collections import namedtuple
 
 from flask import Flask, request, send_from_directory
@@ -60,3 +60,5 @@ class Page(object):
         cls.add_flask(app)
         app.debug = debug
         app.run(*args, **kwargs)
+
+
